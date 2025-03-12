@@ -26,13 +26,9 @@ turtle.shape(image)
 #7. generate csv file with states names to learn
 
 def generate_csv_file_to_learn(correct_states, all_states):
-    states_to_learn_list = []
-    for s in all_states:
-        if s not in correct_states:
-            states_to_learn_list.append(s)
+    states_to_learn_list = [s for s in all_states if s not in correct_states]
     states_to_learn_table = pandas.DataFrame(states_to_learn_list)
     states_to_learn_table.to_csv("states_to_learn.csv")
-
 
 def state_name_print(x,y):
     print_s=turtle.Turtle()
@@ -40,8 +36,6 @@ def state_name_print(x,y):
     print_s.penup()
     print_s.goto((x,y))
     print_s.write(f"{answer_state}", align=ALIGNMENT, font=FONT)
-
-
 
 correct_user_guesses = []
 states_data = pandas.read_csv("50_states.csv")
@@ -51,12 +45,10 @@ game_on = True
 
 while game_on:
     answer_state = screen.textinput(title=title, prompt="What is another state's name?").title()
-
     if answer_state == "Exit":
         print("Game Over!")
         generate_csv_file_to_learn(correct_user_guesses,states_list)
         break
-
     for state in states_list:
         if answer_state == state and answer_state not in correct_user_guesses:
             coordinate_x = states_data[states_data.state == answer_state].iloc[0]["x"]
